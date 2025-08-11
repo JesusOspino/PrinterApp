@@ -12,7 +12,6 @@ public partial class MainWindow : Window
 {
     private readonly SignalRService _signalRService = new();
     private AppSettings _settings;
-    //private NotifyIcon? _notifyIcon;
 
     /// <summary>
     /// Constructor de la clase
@@ -34,9 +33,6 @@ public partial class MainWindow : Window
 
         // Wire SignalR events
         _signalRService.OnPrintRequest += OnPrintRequestReceived;
-
-        // Ejecuta el notifyicon para segundo plano
-        //SetupNotifyIcon();
 
         // Actualiza el estado de conección
         UpdateStatus();
@@ -89,24 +85,13 @@ public partial class MainWindow : Window
         });
     }
 
-    // ------------- Tray icon -------------
-    /*private void SetupNotifyIcon()
+    protected override void OnStateChanged(System.EventArgs e)
     {
-        _notifyIcon = new NotifyIcon();
-        _notifyIcon.Icon = System.Drawing.SystemIcons.Application;
-        _notifyIcon.Visible = true;
-        _notifyIcon.Text = "Nova Printer";
-
-        var menu = new ContextMenuStrip();
-        var open = new ToolStripMenuItem("Abrir");
-        open.Click += (s, e) => Dispatcher.Invoke(() => { Show(); WindowState = WindowState.Normal; Activate(); });
-        var exit = new ToolStripMenuItem("Salir");
-        exit.Click += (s, e) => { _notifyIcon?.Dispose(); Application.Current.Shutdown(); };
-        menu.Items.Add(open);
-        menu.Items.Add(exit);
-        _notifyIcon.ContextMenuStrip = menu;
-
-        _notifyIcon.DoubleClick += (s, e) => Dispatcher.Invoke(() => { Show(); WindowState = WindowState.Normal; Activate(); });
-    }*/
+        base.OnStateChanged(e);
+        if (WindowState == WindowState.Minimized)
+        {
+            Hide(); // Oculta la ventana pero la app sigue viva
+        }
+    }
 
 }

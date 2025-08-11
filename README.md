@@ -2,7 +2,7 @@
 
 App de escritorio para la impresión de facturas en impresoras térmicas
 
-## Tegnologias usadas
+## Tecnologias usadas
 * .NET 9
 * WPF
 * SignalR

@@ -34,45 +34,4 @@
         <ContentControl x:Name="MainContent" Grid.Column="1" Margin="15"/>
     </Grid>
 
-    <!-- Estilos generales -->
-    <!--<Window.Resources>
-        <Style TargetType="Button" x:Key="MenuButtonStyle">
-            <Setter Property="Background" Value="#FAFAFA"/>
-            --><!-- Azul Fluent UI --><!--
-            <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Height" Value="25"/>
-            <Setter Property="Width" Value="Auto"/>
-            <Setter Property="FontSize" Value="13"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Margin" Value="0,1,0,0"/>
-            <Setter Property="Effect">
-                <Setter.Value>
-                    <DropShadowEffect BlurRadius="5" Opacity="0.3" ShadowDepth="0"/>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </Window.Resources>-->
-    
-    <!--<Grid>
-        <Grid.ColumnDefinitions>
-            --><!-- Menú lateral --><!--
-            <ColumnDefinition Width="220"/>
-            --><!-- Contenido --><!--
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-
-        --><!-- Menú lateral --><!--
-        <StackPanel Background="#333" Orientation="Vertical">
-            <TextBlock Text="Nova Printer" Foreground="White"
-                       FontSize="16" FontWeight="Bold" Margin="10" TextAlignment="Center"/>
-            <Button Content="Configuración API" Style="{StaticResource MenuButtonStyle}" Tag="ApiConfig"/>
-            <Button Content="Configuración Impresoras" Style="{StaticResource MenuButtonStyle}" Tag="Printers"/>
-            <Button Content="Acerca de" Style="{StaticResource MenuButtonStyle}" Tag="About"/>
-        </StackPanel>
-
-        --><!-- Contenido dinámico --><!--
-        <ContentControl x:Name="MainContent" Grid.Column="1" />
-
-    </Grid>-->
 </Window>
