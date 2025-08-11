@@ -1,0 +1,67 @@
+## Archivos de Visual Studio
+.vs/
+*.user
+*.suo
+
+## Archivos de compilación
+bin/
+obj/
+[Bb]uild/
+[Ll]og/
+
+## Archivos de dependencias
+packages/
+*.nupkg
+*.snupkg
+
+## Archivos de configuración de Rider
+.idea/
+
+## Archivos de configuración de sistema operativo
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+## Archivos de logs y temporales
+*.log
+*.tlog
+*.tmp
+
+## Archivos de publicación
+publish/
+*.Publish.xml
+
+## Configuración local
+appsettings.Development.json
+secrets.json
+
+## Archivos generados por herramientas
+*.dbmdl
+*.bak
+*.cache
+*.pidb
+*.svclog
+*.sdf
+*.db
+
+## Test Results
+TestResults/
+*.trx
+
+## Archivos de Docker (si no quieres subirlos)
+# docker-compose.override.yml
+
+## Certificados (si generas alguno localmente)
+*.pfx
+*.p12
+*.key
+
+## Configuración para dotnet user-secrets
+**/secrets/
+
+## Archivos de Mac/Linux
+.DS_Store
+*.swp
+
+# Para ignorar migraciones (opcional)
+**/Migrations/
