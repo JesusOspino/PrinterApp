@@ -1,0 +1,138 @@
+﻿<UserControl x:Class="NovaPrinter.Views.AboutPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NovaPrinter.Views" 
+             xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
+             Padding="15">
+
+    <UserControl.Resources>
+        <Style x:Key="SocialButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Width" Value="32"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" 
+                                Background="Transparent"
+                                CornerRadius="16">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#22000000"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    
+    <Border CornerRadius="8" 
+            Background="White" 
+            Padding="30"
+            BorderThickness="1" 
+            BorderBrush="#FFE0E0E0"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"
+            Width="300">
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Contenido principal -->
+            <StackPanel Grid.Row="0">
+                <!-- Logo y título -->
+                <StackPanel HorizontalAlignment="Center">
+                    <TextBlock Text="NOVA" 
+                               Foreground="#4285F4" 
+                               FontSize="28" 
+                               FontWeight="Bold"
+                               TextAlignment="Center"/>
+                    <TextBlock Text="PRINTER" 
+                               Foreground="#2D2F31" 
+                               FontSize="28" 
+                               FontWeight="Bold"
+                               Margin="0 -5 0 15"
+                               TextAlignment="Center"/>
+                </StackPanel>
+
+                <!-- Versión -->
+                <TextBlock Text="Versión 1.0.0" 
+                           FontSize="12" 
+                           Foreground="#757575" 
+                           Margin="0,0,0,20" 
+                           TextAlignment="Center"
+                           FontWeight="Medium"/>
+
+                <!-- Separador -->
+                <Rectangle Height="1" 
+                           Fill="#EEEEEE" 
+                           Margin="0,0,0,20"/>
+
+                <!-- Información del desarrollador -->
+                <TextBlock Text="Desarrollado y mantenido por:" 
+                           FontSize="12" 
+                           Foreground="#616161" 
+                           Margin="0,0,0,5" 
+                           TextAlignment="Center"/>
+
+                <TextBlock Text="Jesús Ospino" 
+                           FontSize="14" 
+                           Foreground="#424242" 
+                           FontWeight="SemiBold"
+                           Margin="0,0,0,25" 
+                           TextAlignment="Center"/>
+            </StackPanel>
+
+            <!-- Footer con copyright y redes -->
+            <Grid Grid.Row="2" Margin="0 15 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Copyright alineado a la izquierda -->
+                <TextBlock Text="© 2023 Nova Printer" 
+                           Grid.Column="0"
+                           FontSize="11" 
+                           Foreground="#9E9E9E" 
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Left"/>
+
+                <!-- Redes sociales alineadas a la derecha -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <!-- GitHub -->
+                    <Button Style="{StaticResource SocialButtonStyle}" 
+                            ToolTip="GitHub"
+                            Click="GitHubButton_Click">
+                        <material:PackIcon Kind="Github" 
+                                         Width="20" 
+                                         Height="20"
+                                         Foreground="#333333"/>
+                    </Button>
+
+                    <!-- LinkedIn -->
+                    <Button Style="{StaticResource SocialButtonStyle}" 
+                            ToolTip="LinkedIn"
+                            Margin="10,0,0,0"
+                            Click="LinkedInButton_Click">
+                        <material:PackIcon Kind="Linkedin" 
+                                         Width="20" 
+                                         Height="20"
+                                         Foreground="#0077B5"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>

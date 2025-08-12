@@ -2,6 +2,7 @@
 using NovaPrinter.Services;
 using NovaPrinter.Views;
 using System.Windows;
+using System.Windows.Media;
 
 namespace NovaPrinter;
 
@@ -55,13 +56,15 @@ public partial class MainWindow : Window
 
     private void ShowAbout()
     {
-        var textBlock = new System.Windows.Controls.TextBlock
+        var page = new AboutPage();
+        MainContent.Content = page;
+        /*var textBlock = new System.Windows.Controls.TextBlock
         {
             Text = $"Nova Printer \nVersión de prototipo 1.0 \nCliente de impresión de facturas. \nDiseñado por Jesus Ospino",
             Margin = new Thickness(10),
             FontSize = 13,
         };
-        MainContent.Content = textBlock;
+        MainContent.Content = textBlock;*/
     }
 
     private void OnSettingsSaved(AppSettings settings)
@@ -74,6 +77,14 @@ public partial class MainWindow : Window
     private void UpdateStatus()
     {
         TxtStatus.Text = _signalRService.IsConnected ? "Conectado" : "Desconectado";
+        if (_signalRService.IsConnected)
+        {
+            StatusIndicator.Fill = new SolidColorBrush(Color.FromRgb(52, 168, 83)); // Verde
+        }
+        else
+        {
+            StatusIndicator.Fill = new SolidColorBrush(Color.FromRgb(255, 68, 68)); // Rojo
+        }
     }
 
     private void OnPrintRequestReceived(string type, object? payload)
