@@ -97,6 +97,9 @@
                     <Button x:Name="BtnPrinters" 
                             Content="Configuración Impresoras" 
                             Style="{StaticResource MenuButtonStyle}"/>
+                    <Button x:Name="BtnAuth" 
+                            Content="Autenticación" 
+                            Style="{StaticResource MenuButtonStyle}"/>
                     <Button x:Name="BtnAbout" 
                             Content="Acerca de" 
                             Style="{StaticResource MenuButtonStyle}"/>

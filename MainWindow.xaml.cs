@@ -27,6 +27,7 @@ public partial class MainWindow : Window
         // Eventos del menu
         BtnApiConfig.Click += (_, _) => ShowApiConfig();
         BtnPrinters.Click += (_, _) => ShowPrinters();
+        BtnAuth.Click += (_, _) => ShowAuthetication();
         BtnAbout.Click += (_, _) => ShowAbout();
 
         // Mostrar por defecto la vista de ApiConfig
@@ -54,17 +55,16 @@ public partial class MainWindow : Window
         MainContent.Content = page;
     }
 
+    private void ShowAuthetication()
+    {
+        var page = new AuthPage(_settings, OnSettingsSaved);
+        MainContent.Content = page;
+    }
+
     private void ShowAbout()
     {
         var page = new AboutPage();
         MainContent.Content = page;
-        /*var textBlock = new System.Windows.Controls.TextBlock
-        {
-            Text = $"Nova Printer \nVersión de prototipo 1.0 \nCliente de impresión de facturas. \nDiseñado por Jesus Ospino",
-            Margin = new Thickness(10),
-            FontSize = 13,
-        };
-        MainContent.Content = textBlock;*/
     }
 
     private void OnSettingsSaved(AppSettings settings)

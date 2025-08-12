@@ -74,15 +74,15 @@
 
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
-                            <TextBlock Text="Company:" Style="{StaticResource StyleLabel}" />
+                            <TextBlock Text="Empresa:" Style="{StaticResource StyleLabel}" />
                             <TextBox x:Name="TxtCompany" Width="200" Style="{StaticResource StyleTextBox}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
-                            <TextBlock Text="CompanyId:" Style="{StaticResource StyleLabel}" />
+                            <TextBlock Text="Id Empresa:" Style="{StaticResource StyleLabel}" />
                             <TextBox x:Name="TxtCompanyId" Width="200" Style="{StaticResource StyleTextBox}"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="TenantId:" Style="{StaticResource StyleLabel}" />
+                            <TextBlock Text="Id Tenant:" Style="{StaticResource StyleLabel}" />
                             <TextBox x:Name="TxtTenantId" Width="200" Style="{StaticResource StyleTextBox}"/>
                         </StackPanel>
                     </StackPanel>
