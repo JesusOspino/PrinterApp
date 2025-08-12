@@ -10,7 +10,7 @@
         Title="Nova Printer" 
         Height="600" Width="900"
         Background="#FAFAFA"
-        >
+        FontFamily="Segoe UI">
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -31,7 +31,7 @@
         </StackPanel>
 
         <!-- Contenido -->
-        <ContentControl x:Name="MainContent" Grid.Column="1" Margin="15"/>
+        <ContentControl x:Name="MainContent" Grid.Column="1" />
     </Grid>
 
 </Window>

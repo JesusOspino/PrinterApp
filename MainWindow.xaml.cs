@@ -57,8 +57,9 @@ public partial class MainWindow : Window
     {
         var textBlock = new System.Windows.Controls.TextBlock
         {
-            Text = "Nova Printer\nVersión de prototipo\nDiseñado para imprimir en impresoras térmicas via SignalR",
-            Margin = new Thickness(10)
+            Text = $"Nova Printer \nVersión de prototipo 1.0 \nCliente de impresión de facturas. \nDiseñado por Jesus Ospino",
+            Margin = new Thickness(10),
+            FontSize = 13,
         };
         MainContent.Content = textBlock;
     }
