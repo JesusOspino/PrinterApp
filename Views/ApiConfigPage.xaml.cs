@@ -19,6 +19,9 @@ public partial class ApiConfigPage : UserControl
         InitializeApiConfig();
     }
 
+    /// <summary>
+    /// Metodo que inicializa los datos al abrir la pagina
+    /// </summary>
     private void InitializeApiConfig()
     {
         // Inicializa los valores

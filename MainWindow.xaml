@@ -112,16 +112,16 @@
                 <StackPanel Grid.Row="1" Margin="0 10">
                     <Button x:Name="BtnApiConfig" 
                             Content="Configuración API" 
-                            Style="{StaticResource MenuButtonStyle}"/>
+                            Style="{StaticResource MenuButtonStyle}" Click="BtnApiConfig_Click"/>
                     <Button x:Name="BtnPrinters" 
                             Content="Configuración Impresoras" 
-                            Style="{StaticResource MenuButtonStyle}"/>
+                            Style="{StaticResource MenuButtonStyle}" Click="BtnPrinters_Click"/>
                     <Button x:Name="BtnAuth" 
                             Content="Autenticación" 
-                            Style="{StaticResource MenuButtonStyle}"/>
+                            Style="{StaticResource MenuButtonStyle}" Click="BtnAuth_Click"/>
                     <Button x:Name="BtnAbout" 
                             Content="Acerca de" 
-                            Style="{StaticResource MenuButtonStyle}"/>
+                            Style="{StaticResource MenuButtonStyle}" Click="BtnAbout_Click"/>
                 </StackPanel>
 
                 <!-- Área de estado mejorada -->
