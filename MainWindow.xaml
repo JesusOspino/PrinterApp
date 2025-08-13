@@ -28,7 +28,7 @@
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="border" 
                                 Background="{TemplateBinding Background}"
-                                CornerRadius="4">
+                                CornerRadius="04">
                             <ContentPresenter x:Name="contentPresenter"
                                             Content="{TemplateBinding Content}"
                                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
@@ -47,6 +47,24 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+        </Style>
+
+        <!-- Estilo para botones de acción -->
+        <Style TargetType="Button" x:Key="ActionButtonStyle" BasedOn="{StaticResource MenuButtonStyle}">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="Background" Value="#4285F4"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Margin" Value="10 5"/>
+            <Setter Property="Padding" Value="10 7"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#5A95F5"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#3367D6"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
         <!-- Estilo para el área de estado -->
@@ -70,6 +88,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 
@@ -128,6 +147,13 @@
                         </StackPanel>
                     </StackPanel>
                 </Border>
+
+                <!-- Nuevos botones de acción -->
+                <StackPanel Grid.Row="3" Margin="10 10 10 20">
+                    <Button x:Name="BtnConnect" 
+                            Content="Conectar" 
+                            Style="{StaticResource ActionButtonStyle}" Click="BtnConnect_Click"/>
+                </StackPanel>
             </Grid>
         </Border>
 
@@ -135,9 +161,7 @@
         <Border Grid.Column="1" CornerRadius="6" Margin="10">
             <ContentControl x:Name="MainContent"/>
         </Border>
-        
-        <!-- Contenido 
-        <ContentControl x:Name="MainContent" Grid.Column="1" />-->
+
     </Grid>
 
 </Window>

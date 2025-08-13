@@ -10,8 +10,6 @@ namespace NovaPrinter.Views;
 /// </summary>
 public partial class ApiConfigPage : UserControl
 {
-    private readonly SignalRService _signalRService;
-
     // Accedemos directamente al servicio estático
     private AppSettings Settings => SettingsService.Current;
 
@@ -19,8 +17,6 @@ public partial class ApiConfigPage : UserControl
     {
         InitializeComponent();
         InitializeApiConfig();
-
-        _signalRService = signalR;
     }
 
     private void InitializeApiConfig()
@@ -41,35 +37,6 @@ public partial class ApiConfigPage : UserControl
     private void BtnSave_Click(object sender, RoutedEventArgs e)
     {
         Save();
-    }
-
-    /// <summary>
-    /// Metodo que se ejecuta al hacer click en el boton BtnConnect
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <returns></returns>
-    private async void BtnConnect_Click(object sender, RoutedEventArgs e)
-    {
-        await ConnectAsync();
-    }
-
-    /// <summary>
-    /// Metodo que inicia la conección al backend y conecta SignalR
-    /// </summary>
-    /// <returns></returns>
-    private async Task ConnectAsync()
-    {
-        Save();
-        try
-        {
-            await _signalRService.ConnectAsync(Settings);
-            MessageBox.Show($"Conectado al hub", "Ok", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show($"Error al conectar: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-        }
     }
 
     /// <summary>

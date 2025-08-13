@@ -1,5 +1,7 @@
-﻿using NovaPrinter.Services;
+﻿using NovaPrinter.Models;
+using NovaPrinter.Services;
 using NovaPrinter.Views;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 
@@ -11,6 +13,9 @@ namespace NovaPrinter;
 public partial class MainWindow : Window
 {
     private readonly SignalRService _signalRService = new();
+    
+    // Accedemos directamente al servicio estático
+    private AppSettings Settings => SettingsService.Current;
 
     /// <summary>
     /// Constructor de la clase
@@ -70,11 +75,15 @@ public partial class MainWindow : Window
         TxtStatus.Text = _signalRService.IsConnected ? "Conectado" : "Desconectado";
         if (_signalRService.IsConnected)
         {
+            TxtStatus.Text = "Conectado";
             StatusIndicator.Fill = new SolidColorBrush(Color.FromRgb(52, 168, 83)); // Verde
+            BtnConnect.Content = "Desconectar";
         }
         else
         {
+            TxtStatus.Text = "Desconectado";
             StatusIndicator.Fill = new SolidColorBrush(Color.FromRgb(255, 68, 68)); // Rojo
+            BtnConnect.Content = "Conectar";
         }
     }
 
@@ -97,4 +106,16 @@ public partial class MainWindow : Window
         }
     }
 
+    private async void BtnConnect_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            await _signalRService.ConnectAsync(Settings);
+            MessageBox.Show($"Conectado al servidor", "Ok", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Error al conectar: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
 }
