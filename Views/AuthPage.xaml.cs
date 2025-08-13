@@ -1,4 +1,5 @@
 ﻿using NovaPrinter.Models;
+using NovaPrinter.Services;
 using NovaPrinter.Shared;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,27 +11,45 @@ namespace NovaPrinter.Views;
 /// </summary>
 public partial class AuthPage : UserControl
 {
-    private AppSettings _settings;
-    private readonly Action<AppSettings> _onSaved;
+    // Accedemos directamente al servicio estático
+    private AppSettings Settings => SettingsService.Current;
 
-    public AuthPage(AppSettings settings, Action<AppSettings> onSaved)
+    public AuthPage()
     {
         InitializeComponent();
-
-        _settings = settings;
-        _onSaved = onSaved;
-
-        // Inicializa los valores
-        TxtUsername.Text = _settings.Username;
-        TxtPassword.Password = Utils.Decrypt(_settings.Password);
+        InitializeSettings();
     }
 
+    /// <summary>
+    /// Metodo que inicializa los datos de la pagina
+    /// </summary>
+    private void InitializeSettings()
+    {
+        // Inicializa los valores
+        TxtUsername.Text = Settings.Username;
+        TxtPassword.Password = Utils.Decrypt(Settings.Password);
+    }
+
+    /// <summary>
+    /// Metodo que se ejecuta al hacer click en el boton BtnSave
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void BtnSave_Click(object sender, System.Windows.RoutedEventArgs e)
     {
-        _settings.Username = TxtUsername.Text.Trim();
-        _settings.Password = Utils.Encrypt(TxtPassword.Password.Trim());
+        Save();
+    }
 
-        _onSaved?.Invoke(_settings);
+    /// <summary>
+    /// Guarda los datos del formulario
+    /// </summary>
+    private void Save()
+    {
+        Settings.Username = TxtUsername.Text.Trim();
+        Settings.Password = Utils.Encrypt(TxtPassword.Password.Trim());
+
+        SettingsService.Save();
+
         MessageBox.Show("Credenciales guardadas con exito.", "Ok", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 

@@ -13,6 +13,11 @@ public partial class AboutPage : UserControl
         InitializeComponent();
     }
 
+    /// <summary>
+    /// Metodo que se ejecuta al hacer click en el boton GitHubButton
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void GitHubButton_Click(object sender, System.Windows.RoutedEventArgs e)
     {
         Process.Start(new ProcessStartInfo("https://github.com/JesusOspino")
@@ -21,6 +26,11 @@ public partial class AboutPage : UserControl
         });
     }
 
+    /// <summary>
+    /// Metodo que se ejecuta al hacer click en el boton LinkedInButton
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void LinkedInButton_Click(object sender, System.Windows.RoutedEventArgs e)
     {
         Process.Start(new ProcessStartInfo("https://linkedin.com/in/jesusospino25")

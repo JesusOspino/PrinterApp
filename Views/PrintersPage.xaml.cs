@@ -10,16 +10,20 @@ namespace NovaPrinter.Views;
 /// </summary>
 public partial class PrintersPage : UserControl
 {
-    private AppSettings _settings;
-    private readonly Action<AppSettings> _onSaved;
+    // Accedemos directamente al servicio estático
+    private AppSettings Settings => SettingsService.Current;
 
-    public PrintersPage(AppSettings settings, Action<AppSettings> onSaved)
+    public PrintersPage()
     {
         InitializeComponent();
+        InitializePrinters();
+    }
 
-        _settings = settings;
-        _onSaved = onSaved;
-
+    /// <summary>
+    /// Metodo que inicializa los datos de la pagina
+    /// </summary>
+    private void InitializePrinters()
+    {
         // obtenamos las impresoras
         var printers = PrinterService.GetInstalledPrinters();
 
@@ -27,14 +31,26 @@ public partial class PrintersPage : UserControl
         CmbPrinters.ItemsSource = printers;
 
         // Si ya existe una seleccioinada se marca
-        if (!string.IsNullOrWhiteSpace(_settings.PrinterName) && printers.Contains(_settings.PrinterName))
+        if (!string.IsNullOrWhiteSpace(Settings.PrinterName) && printers.Contains(Settings.PrinterName))
         {
-            CmbPrinters.SelectedItem = _settings.PrinterName;
+            CmbPrinters.SelectedItem = Settings.PrinterName;
         }
-
     }
 
+    /// <summary>
+    /// Metodo que se ejecuta al hacer click en el boton BtnSavePrinter
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void BtnSavePrinter_Click(object sender, System.Windows.RoutedEventArgs e)
+    {
+        Save();
+    }
+
+    /// <summary>
+    /// Guarda los datos del formulario
+    /// </summary>
+    private void Save()
     {
         var selected = CmbPrinters.SelectedItem as string;
 
@@ -44,8 +60,9 @@ public partial class PrintersPage : UserControl
             return;
         }
 
-        _settings.PrinterName = selected;
-        _onSaved?.Invoke(_settings);
+        Settings.PrinterName = selected;
+        SettingsService.Save();
+
         MessageBox.Show("Impresora guardada con exito.", "Ok", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 }

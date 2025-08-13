@@ -102,6 +102,12 @@ public class SignalRService
 
     #region Metodos privados
 
+    /// <summary>
+    /// Combina la Url y el Hub para devolver la ruta final de conexión
+    /// </summary>
+    /// <param name="baseUrl"></param>
+    /// <param name="hub"></param>
+    /// <returns></returns>
     private string CombineUrl(string baseUrl, string hub)
     {
         // aseguro formato correcto

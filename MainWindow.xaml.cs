@@ -1,5 +1,4 @@
-﻿using NovaPrinter.Models;
-using NovaPrinter.Services;
+﻿using NovaPrinter.Services;
 using NovaPrinter.Views;
 using System.Windows;
 using System.Windows.Media;
@@ -12,7 +11,6 @@ namespace NovaPrinter;
 public partial class MainWindow : Window
 {
     private readonly SignalRService _signalRService = new();
-    private AppSettings _settings;
 
     /// <summary>
     /// Constructor de la clase
@@ -22,7 +20,7 @@ public partial class MainWindow : Window
         InitializeComponent();
 
         // Carga settings
-        _settings = SettingsService.Load();
+        SettingsService.Load();
 
         // Eventos del menu
         BtnApiConfig.Click += (_, _) => ShowApiConfig();
@@ -45,19 +43,19 @@ public partial class MainWindow : Window
     /// </summary>
     private void ShowApiConfig()
     {
-        var page = new ApiConfigPage(_settings, OnSettingsSaved, _signalRService);
+        var page = new ApiConfigPage(_signalRService);
         MainContent.Content = page;
     }
 
     private void ShowPrinters()
     {
-        var page = new PrintersPage(_settings, OnSettingsSaved);
+        var page = new PrintersPage();
         MainContent.Content = page;
     }
 
     private void ShowAuthetication()
     {
-        var page = new AuthPage(_settings, OnSettingsSaved);
+        var page = new AuthPage();
         MainContent.Content = page;
     }
 
@@ -65,13 +63,6 @@ public partial class MainWindow : Window
     {
         var page = new AboutPage();
         MainContent.Content = page;
-    }
-
-    private void OnSettingsSaved(AppSettings settings)
-    {
-        _settings = settings;
-        SettingsService.Save(_settings);
-        UpdateStatus();
     }
 
     private void UpdateStatus()

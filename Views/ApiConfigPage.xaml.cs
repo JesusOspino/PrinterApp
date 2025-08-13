@@ -10,35 +10,60 @@ namespace NovaPrinter.Views;
 /// </summary>
 public partial class ApiConfigPage : UserControl
 {
-    private AppSettings _settings;
-    private readonly Action<AppSettings> _onSaved;
     private readonly SignalRService _signalRService;
 
-    public ApiConfigPage(AppSettings settings, Action<AppSettings> onSaved, SignalRService signalR)
+    // Accedemos directamente al servicio estático
+    private AppSettings Settings => SettingsService.Current;
+
+    public ApiConfigPage(SignalRService signalR)
     {
         InitializeComponent();
+        InitializeApiConfig();
 
-        _settings = settings;
-        _onSaved = onSaved;
         _signalRService = signalR;
-
-        // Inicializa los valores
-        TxtApiUrl.Text = _settings.ApiUrl;
-        TxtHub.Text = _settings.HubName;
-        TxtCompany.Text = _settings.Company;
-        TxtCompanyId.Text = _settings.CompanyId;
-        TxtTenantId.Text = _settings.TenantId;
-
-        BtnSave.Click += (_, _) => Save();
-        BtnConnect.Click += async (_, _) => await ConnectAsync();
     }
 
+    private void InitializeApiConfig()
+    {
+        // Inicializa los valores
+        TxtApiUrl.Text = Settings.ApiUrl;
+        TxtHub.Text = Settings.HubName;
+        TxtCompany.Text = Settings.Company;
+        TxtCompanyId.Text = Settings.CompanyId;
+        TxtTenantId.Text = Settings.TenantId;
+    }
+
+    /// <summary>
+    /// Metodo que se ejecuta al hacer click en el boton BtnSave
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void BtnSave_Click(object sender, RoutedEventArgs e)
+    {
+        Save();
+    }
+
+    /// <summary>
+    /// Metodo que se ejecuta al hacer click en el boton BtnConnect
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <returns></returns>
+    private async void BtnConnect_Click(object sender, RoutedEventArgs e)
+    {
+        await ConnectAsync();
+    }
+
+    /// <summary>
+    /// Metodo que inicia la conección al backend y conecta SignalR
+    /// </summary>
+    /// <returns></returns>
     private async Task ConnectAsync()
     {
         Save();
         try
         {
-            await _signalRService.ConnectAsync(_settings);
+            await _signalRService.ConnectAsync(Settings);
             MessageBox.Show($"Conectado al hub", "Ok", MessageBoxButton.OK, MessageBoxImage.Information);
         }
         catch (Exception ex)
@@ -47,15 +72,19 @@ public partial class ApiConfigPage : UserControl
         }
     }
 
+    /// <summary>
+    /// Guarda los datos del formulario
+    /// </summary>
     private void Save()
     {
-        _settings.ApiUrl = TxtApiUrl.Text.Trim();
-        _settings.HubName = TxtHub.Text.Trim();
-        _settings.Company = TxtCompany.Text.Trim();
-        _settings.CompanyId = TxtCompanyId.Text.Trim();
-        _settings.TenantId = TxtTenantId.Text.Trim();
+        Settings.ApiUrl = TxtApiUrl.Text.Trim();
+        Settings.HubName = TxtHub.Text.Trim();
+        Settings.Company = TxtCompany.Text.Trim();
+        Settings.CompanyId = TxtCompanyId.Text.Trim();
+        Settings.TenantId = TxtTenantId.Text.Trim();
 
-        _onSaved?.Invoke(_settings);
+        SettingsService.Save();
+
         MessageBox.Show("Configuración guardada", "OK", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 }

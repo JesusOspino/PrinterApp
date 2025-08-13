@@ -102,7 +102,7 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- Copyright alineado a la izquierda -->
-                <TextBlock Text="© 2023 Nova Printer" 
+                <TextBlock Text="© 2025 Nova Printer" 
                            Grid.Column="0"
                            FontSize="11" 
                            Foreground="#9E9E9E" 

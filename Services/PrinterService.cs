@@ -3,6 +3,12 @@ using System.Drawing.Printing;
 
 public static class PrinterService
 {
+    /// <summary>
+    /// Obtiene las impresoras instaladas en el PC del cliente
+    /// </summary>
+    /// <returns>
+    /// Lista de impresoras instaladas
+    /// </returns>
     public static string[] GetInstalledPrinters()
     {
         return PrinterSettings.InstalledPrinters
