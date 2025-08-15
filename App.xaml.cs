@@ -1,5 +1,4 @@
 ﻿using Hardcodet.Wpf.TaskbarNotification;
-using NovaPrinter.Services;
 using System.Windows;
 
 namespace NovaPrinter;
@@ -9,13 +8,11 @@ namespace NovaPrinter;
 /// </summary>
 public partial class App : Application
 {
-    private TaskbarIcon _notifyIcon;
+    private TaskbarIcon _notifyIcon = null!;
 
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
-
-        NotificationService.Initialize();
 
         // Mantener vivo el TaskbarIcon
         _notifyIcon = (TaskbarIcon)FindResource("MyNotifyIcon");

@@ -4,6 +4,7 @@ using NovaPrinter.Views;
 using System.Text;
 using System.Text.Json;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace NovaPrinter;
@@ -72,7 +73,6 @@ public partial class MainWindow : Window
     /// <param name="e"></param>
     private void BtnPrinters_Click(object sender, RoutedEventArgs e)
     {
-        NotificationService.ShowToast("Prueba", "Jesus Ospino");
         var page = new PrintersPage();
         MainContent.Content = page;
         UpdateStatus();
@@ -214,7 +214,7 @@ public partial class MainWindow : Window
         {
             var invoice = JsonSerializer.Deserialize<InvoiceDto>(payload.ToString()!);
             TxtStatus.Text = invoice?.Customer.Name;
-            PrinterService.PrintRaw(GetInvoiceAsBytes(invoice!));
+            PrinterService.PrintRaw(GetInvoiceAsBytes(invoice!), invoice!);
         });
     }
 

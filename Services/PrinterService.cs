@@ -24,7 +24,7 @@ public static class PrinterService
 
     // Aquí deberías implementar la lógica específica para imprimir en tu impresora térmica.
     // Por ejemplo, enviar bytes ESC/POS por puerto serie/USB, o usar un driver de Windows.
-    public static void PrintRaw(byte[] data)
+    public static void PrintRaw(byte[] data, InvoiceDto data1)
     {
         if(string.IsNullOrWhiteSpace(Settings.PrinterName))
         {
@@ -35,6 +35,6 @@ public static class PrinterService
         // placeholder: implementar método real según tu impresora
         // Puedes usar RawPrinterHelper (Win32) o librerías de terceros para enviar bytes.
         //throw new NotImplementedException("Implementa el envío raw a la impresora térmica.");
-        NotificationService.ShowToast("Imprimir", "Datos");
+        NotificationService.ShowToast("Imprimir", data1.Customer.Name);
     }
 }
