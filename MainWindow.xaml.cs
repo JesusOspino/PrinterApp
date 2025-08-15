@@ -124,7 +124,7 @@ public partial class MainWindow : Window
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Error al conectar: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
@@ -161,35 +161,38 @@ public partial class MainWindow : Window
         if (_signalRService.CurrentState == ConnectionState.Connecting)
         {
             TxtStatus.Text = "Conectando...";
+            BtnConnect.Content = "Conectando...";
             StatusIndicator.Fill = new SolidColorBrush(Color.FromRgb(255, 255, 0)); // Amarillo
             BtnConnect.IsEnabled = false;
         }
         else if (_signalRService.CurrentState == ConnectionState.Connected)
         {
             TxtStatus.Text = "Conectado";
-            StatusIndicator.Fill = new SolidColorBrush(Color.FromRgb(52, 168, 83)); // Verde
             BtnConnect.Content = "Desconectar";
+            StatusIndicator.Fill = new SolidColorBrush(Color.FromRgb(52, 168, 83)); // Verde
+            BtnConnect.Background = new SolidColorBrush(Color.FromRgb(249, 109, 109)); // Rojo
             BtnConnect.IsEnabled = true;
         }
         else if (_signalRService.CurrentState == ConnectionState.Reconnecting)
         {
             TxtStatus.Text = "Reconectando...";
+            BtnConnect.Content = "Reconectando...";
             StatusIndicator.Fill = new SolidColorBrush(Color.FromRgb(255, 255, 0)); // Amarillo
-            BtnConnect.Content = "Conectar";
             BtnConnect.IsEnabled = false;
         }
         else if (_signalRService.CurrentState == ConnectionState.Disconnecting)
         {
             TxtStatus.Text = "Desconectando...";
+            BtnConnect.Content = "Desconectando...";
             StatusIndicator.Fill = new SolidColorBrush(Color.FromRgb(255, 255, 0)); // Amarillo
-            BtnConnect.Content = "Conectar";
             BtnConnect.IsEnabled = false;
         }
         else if (_signalRService.CurrentState == ConnectionState.Disconnected)
         {
             TxtStatus.Text = "Desconectado";
-            StatusIndicator.Fill = new SolidColorBrush(Color.FromRgb(255, 68, 68)); // Rojo
             BtnConnect.Content = "Conectar";
+            StatusIndicator.Fill = new SolidColorBrush(Color.FromRgb(255, 68, 68)); // Rojo
+            BtnConnect.Background = new SolidColorBrush(Color.FromRgb(66, 133, 244)); // Azul
             BtnConnect.IsEnabled = true;
         }
     }

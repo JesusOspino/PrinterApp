@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
 using NovaPrinter.Models;
+using System.Windows;
 
 namespace NovaPrinter.Services;
 
@@ -24,8 +25,6 @@ public class SignalRService
     private AppSettings Settings => SettingsService.Current;
 
     private Timer _tokenRenewalTimer = null!;
-
-    //public bool IsConnected => _connection?.State == HubConnectionState.Connected;
 
     private ConnectionState _currentState = ConnectionState.Disconnected;
 
@@ -53,58 +52,72 @@ public class SignalRService
     /// </summary>
     public async Task ConnectAsync()
     {
+        // Validaciones
         if (string.IsNullOrWhiteSpace(Settings.UrlHub))
             throw new InvalidOperationException("La Url del Hub no puede estar vacía.");
 
         if (Settings.JwtToken == null)
             throw new InvalidOperationException("Token no configurado. verifica las credenciales antes de conectar.");
 
-        _connection = new HubConnectionBuilder()
-            .WithUrl(Settings.UrlHub, options =>
+        try
+        {
+            CurrentState = ConnectionState.Connecting;
+
+            // Conexion al hub
+            _connection = new HubConnectionBuilder()
+                .WithUrl(Settings.UrlHub, options =>
+                {
+                    options.AccessTokenProvider = () => Task.FromResult(Settings.JwtToken)!;
+                })
+                .WithAutomaticReconnect(new[] { TimeSpan.Zero, TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(5) })
+                .Build();
+
+            // Se mentiene escuchando las resouestas del back y emite la data obtenida
+            _connection.On<object>("GetHutPrintInvoice", (object payload) =>
             {
-                options.AccessTokenProvider = () => Task.FromResult(Settings.JwtToken)!;
-            })
-            .WithAutomaticReconnect(new[] { TimeSpan.Zero, TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(5) })
-            .Build();
+                OnPrintRequest?.Invoke(payload);
+            });
 
-        // Registro del método que el servidor invoca
-        _connection.On<object>("GetHutPrintInvoice", (object payload) =>
-        {
-            OnPrintRequest?.Invoke(payload);
-        });
+            // Manejo de eventos de Reconneccion
+            _connection.Reconnecting += error =>
+            {
+                Console.WriteLine($"Reconectando al hub... Error: {error?.Message}");
+                CurrentState = ConnectionState.Reconnecting;
+                return Task.CompletedTask;
+            };
 
-        // Manejo de eventos de conexión
-        _connection.Reconnecting += error =>
-        {
-            Console.WriteLine($"Reconectando al hub... Error: {error?.Message}");
-            CurrentState = ConnectionState.Reconnecting;
-            return Task.CompletedTask;
-        };
+            // Manejo de eventos de Reconnectado
+            _connection.Reconnected += connectionId =>
+            {
+                Console.WriteLine($"Reconectado al hub. Nuevo ConnectionId: {connectionId}");
+                CurrentState = ConnectionState.Connected;
+                return Task.CompletedTask;
+            };
 
-        _connection.Reconnected += connectionId =>
-        {
-            Console.WriteLine($"Reconectado al hub. ConnectionId: {connectionId}");
+            // Manejo de eventos de Desconectado
+            /*_connection.Closed += async error =>
+            {
+                CurrentState = ConnectionState.Disconnected;
+                Console.WriteLine($"Conexión cerrada: {error?.Message}. Reintentando en 3 segundos...");
+                await Task.Delay(3000);
+                try
+                {
+                    await ConnectAsync();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error al reconectar: {ex.Message}");
+                }
+            };*/
+
+            await _connection.StartAsync();
             CurrentState = ConnectionState.Connected;
-            return Task.CompletedTask;
-        };
-
-        _connection.Closed += async error =>
+        }
+        catch (Exception ex)
         {
+            MessageBox.Show($"Error al conectar: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             CurrentState = ConnectionState.Disconnected;
-            Console.WriteLine($"Conexión cerrada: {error?.Message}. Reintentando en 3 segundos...");
-            await Task.Delay(3000);
-            try
-            {
-                await ConnectAsync();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error al reconectar: {ex.Message}");
-            }
-        };
-
-        await _connection.StartAsync();
-        CurrentState = ConnectionState.Connected;
+        }
     }
 
     /// <summary>
@@ -117,6 +130,7 @@ public class SignalRService
             _tokenRenewalTimer?.Dispose();
             if (_connection != null)
             {
+                CurrentState = ConnectionState.Disconnecting;
                 await _connection.StopAsync();
                 await _connection.DisposeAsync();
                 _connection = null;
