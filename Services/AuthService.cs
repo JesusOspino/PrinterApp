@@ -20,7 +20,7 @@ public class AuthService
 
     public async Task<bool> LoginAsync()
     {
-        var url = Settings.ApiUrl;
+        var url = Settings.UrlLogin;
 
         var payload = new
         {

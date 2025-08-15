@@ -76,16 +76,16 @@
 
                 <TextBlock Text="Configuración API" FontSize="18" FontWeight="SemiBold" Foreground="#FF333333" Margin="0,0,0,15"/>
 
-                <GroupBox Header="Conexión hub" Padding="10" Margin="0,0,0,10" BorderBrush="#FFE0E0E0" FontWeight="SemiBold" Foreground="#FF444444">
+                <GroupBox Header="Conexión servidor" Padding="10" Margin="0,0,0,10" BorderBrush="#FFE0E0E0" FontWeight="SemiBold" Foreground="#FF444444">
                     
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
-                            <TextBlock Text="API URL:" Style="{StaticResource StyleLabel}" />
-                            <TextBox x:Name="TxtApiUrl" Width="400" Style="{StaticResource StyleTextBox}"/>
+                            <TextBlock Text="URL login:" Style="{StaticResource StyleLabel}" />
+                            <TextBox x:Name="TxtUrlLogin" Width="400" Style="{StaticResource StyleTextBox}"/>
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Hub:" Style="{StaticResource StyleLabel}" />
-                            <TextBox x:Name="TxtHub" Width="200" Style="{StaticResource StyleTextBox}"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                            <TextBlock Text="URL HUB:" Style="{StaticResource StyleLabel}" />
+                            <TextBox x:Name="TxtHub" Width="400" Style="{StaticResource StyleTextBox}"/>
                         </StackPanel>
                     </StackPanel>
                     

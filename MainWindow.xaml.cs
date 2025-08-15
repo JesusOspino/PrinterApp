@@ -1,6 +1,8 @@
 ﻿using NovaPrinter.Models;
 using NovaPrinter.Services;
 using NovaPrinter.Views;
+using System.Text;
+using System.Text.Json;
 using System.Windows;
 using System.Windows.Media;
 
@@ -13,9 +15,6 @@ public partial class MainWindow : Window
 {
     private readonly SignalRService _signalRService = new();
     
-    // Accedemos directamente al servicio estático
-    private AppSettings Settings => SettingsService.Current;
-
     /// <summary>
     /// Constructor de la clase
     /// </summary>
@@ -38,9 +37,19 @@ public partial class MainWindow : Window
 
         // Wire SignalR events
         _signalRService.OnPrintRequest += OnPrintRequestReceived;
+        _signalRService.OnConnectionStateChanged += OnReciveStatusConnection;
 
         // Actualiza el estado de conección
         UpdateStatus();
+    }
+
+    /// <summary>
+    /// Metodo que abre la pagina de ApiConfig
+    /// </summary>
+    private void ShowDefaultApiConfigPage()
+    {
+        var page = new ApiConfigPage();
+        MainContent.Content = page;
     }
 
     #region Metodos o eventos de controles de la app
@@ -53,6 +62,7 @@ public partial class MainWindow : Window
     private void BtnApiConfig_Click(object sender, RoutedEventArgs e)
     {
         ShowDefaultApiConfigPage();
+        UpdateStatus();
     }
 
     /// <summary>
@@ -62,8 +72,10 @@ public partial class MainWindow : Window
     /// <param name="e"></param>
     private void BtnPrinters_Click(object sender, RoutedEventArgs e)
     {
+        NotificationService.ShowToast("Prueba", "Jesus Ospino");
         var page = new PrintersPage();
         MainContent.Content = page;
+        UpdateStatus();
     }
 
     /// <summary>
@@ -75,6 +87,7 @@ public partial class MainWindow : Window
     {
         var page = new AuthPage();
         MainContent.Content = page;
+        UpdateStatus();
     }
 
     /// <summary>
@@ -86,6 +99,7 @@ public partial class MainWindow : Window
     {
         var page = new AboutPage();
         MainContent.Content = page;
+        UpdateStatus();
     }
 
     /// <summary>
@@ -97,58 +111,21 @@ public partial class MainWindow : Window
     {
         try
         {
-            await _signalRService.ConnectAsync(Settings);
-            MessageBox.Show($"Conectado al servidor", "Ok", MessageBoxButton.OK, MessageBoxImage.Information);
+            if (_signalRService.CurrentState == ConnectionState.Connected)
+            {
+                await _signalRService.DisconnectAsync();
+            }
+            else
+            {
+                await _signalRService.ConnectAsync();
+            }
+
+            UpdateStatus();
         }
         catch (Exception ex)
         {
             MessageBox.Show($"Error al conectar: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
-    }
-
-    #endregion Metodos o eventos de controles de la app
-
-    /// <summary>
-    /// Metodo que abre la pagina de ApiConfig
-    /// </summary>
-    private void ShowDefaultApiConfigPage()
-    {
-        var page = new ApiConfigPage(_signalRService);
-        MainContent.Content = page;
-    }
-
-    /// <summary>
-    /// Verifica el estado de conexión y actualiza la parte visual
-    /// </summary>
-    private void UpdateStatus()
-    {
-        if (_signalRService.IsConnected)
-        {
-            TxtStatus.Text = "Conectado";
-            StatusIndicator.Fill = new SolidColorBrush(Color.FromRgb(52, 168, 83)); // Verde
-            BtnConnect.Content = "Desconectar";
-        }
-        else
-        {
-            TxtStatus.Text = "Desconectado";
-            StatusIndicator.Fill = new SolidColorBrush(Color.FromRgb(255, 68, 68)); // Rojo
-            BtnConnect.Content = "Conectar";
-        }
-    }
-
-    /// <summary>
-    /// verifica cuando hay una facura y despara un evento para imprimirla
-    /// </summary>
-    /// <param name="type"></param>
-    /// <param name="payload"></param>
-    private void OnPrintRequestReceived(string type, object? payload)
-    {
-        // Aquí recibes el evento desde SignalR; en prototipo solo logueamos.
-        // Puedes deserializar payload según tu contrato y llamar PrinterService.PrintRaw
-        Dispatcher.Invoke(() =>
-        {
-            System.Windows.MessageBox.Show($"Print request received: {type}");
-        });
     }
 
     /// <summary>
@@ -164,5 +141,87 @@ public partial class MainWindow : Window
         }
     }
 
-    
+    #endregion Metodos o eventos de controles de la app
+
+    #region Metodos de cambio de estado
+
+    private void OnReciveStatusConnection(ConnectionState state)
+    {
+        Dispatcher.Invoke(() =>
+        {
+            UpdateStatus();
+        });
+    }
+
+    /// <summary>
+    /// Verifica el estado de conexión y actualiza la parte visual
+    /// </summary>
+    private void UpdateStatus()
+    {
+        if (_signalRService.CurrentState == ConnectionState.Connecting)
+        {
+            TxtStatus.Text = "Conectando...";
+            StatusIndicator.Fill = new SolidColorBrush(Color.FromRgb(255, 255, 0)); // Amarillo
+            BtnConnect.IsEnabled = false;
+        }
+        else if (_signalRService.CurrentState == ConnectionState.Connected)
+        {
+            TxtStatus.Text = "Conectado";
+            StatusIndicator.Fill = new SolidColorBrush(Color.FromRgb(52, 168, 83)); // Verde
+            BtnConnect.Content = "Desconectar";
+            BtnConnect.IsEnabled = true;
+        }
+        else if (_signalRService.CurrentState == ConnectionState.Reconnecting)
+        {
+            TxtStatus.Text = "Reconectando...";
+            StatusIndicator.Fill = new SolidColorBrush(Color.FromRgb(255, 255, 0)); // Amarillo
+            BtnConnect.Content = "Conectar";
+            BtnConnect.IsEnabled = false;
+        }
+        else if (_signalRService.CurrentState == ConnectionState.Disconnecting)
+        {
+            TxtStatus.Text = "Desconectando...";
+            StatusIndicator.Fill = new SolidColorBrush(Color.FromRgb(255, 255, 0)); // Amarillo
+            BtnConnect.Content = "Conectar";
+            BtnConnect.IsEnabled = false;
+        }
+        else if (_signalRService.CurrentState == ConnectionState.Disconnected)
+        {
+            TxtStatus.Text = "Desconectado";
+            StatusIndicator.Fill = new SolidColorBrush(Color.FromRgb(255, 68, 68)); // Rojo
+            BtnConnect.Content = "Conectar";
+            BtnConnect.IsEnabled = true;
+        }
+    }
+
+    #endregion Metodos de cambio de estado
+
+    #region Metodos para imprimir
+
+    /// <summary>
+    /// verifica cuando hay una facura y despara un evento para imprimirla
+    /// </summary>
+    /// <param name="type"></param>
+    /// <param name="payload"></param>
+    private void OnPrintRequestReceived(object payload)
+    {
+        // Aquí recibes el evento desde SignalR; en prototipo solo logueamos.
+        // Puedes deserializar payload según tu contrato y llamar PrinterService.PrintRaw
+        Dispatcher.Invoke(() =>
+        {
+            var invoice = JsonSerializer.Deserialize<InvoiceDto>(payload.ToString()!);
+            TxtStatus.Text = invoice?.Customer.Name;
+            PrinterService.PrintRaw(GetInvoiceAsBytes(invoice!));
+        });
+    }
+
+    // Método auxiliar para convertir la factura a bytes para impresión
+    private byte[] GetInvoiceAsBytes(InvoiceDto invoice)
+    {
+        // Implementa según tu lógica de impresión
+        return Encoding.UTF8.GetBytes(JsonSerializer.Serialize(invoice));
+    }
+
+    #endregion Metodos para imprimir
+
 }

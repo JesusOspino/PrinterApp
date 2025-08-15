@@ -13,7 +13,7 @@ public partial class ApiConfigPage : UserControl
     // Accedemos directamente al servicio estático
     private AppSettings Settings => SettingsService.Current;
 
-    public ApiConfigPage(SignalRService signalR)
+    public ApiConfigPage()
     {
         InitializeComponent();
         InitializeApiConfig();
@@ -25,8 +25,8 @@ public partial class ApiConfigPage : UserControl
     private void InitializeApiConfig()
     {
         // Inicializa los valores
-        TxtApiUrl.Text = Settings.ApiUrl;
-        TxtHub.Text = Settings.HubName;
+        TxtUrlLogin.Text = Settings.UrlLogin;
+        TxtHub.Text = Settings.UrlHub;
         TxtCompany.Text = Settings.Company;
         TxtCompanyId.Text = Settings.CompanyId;
         TxtTenantId.Text = Settings.TenantId;
@@ -47,8 +47,8 @@ public partial class ApiConfigPage : UserControl
     /// </summary>
     private void Save()
     {
-        Settings.ApiUrl = TxtApiUrl.Text.Trim();
-        Settings.HubName = TxtHub.Text.Trim();
+        Settings.UrlLogin = TxtUrlLogin.Text.Trim();
+        Settings.UrlHub = TxtHub.Text.Trim();
         Settings.Company = TxtCompany.Text.Trim();
         Settings.CompanyId = TxtCompanyId.Text.Trim();
         Settings.TenantId = TxtTenantId.Text.Trim();

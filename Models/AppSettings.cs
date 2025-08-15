@@ -2,8 +2,8 @@
 
 public class AppSettings
 {
-    public string? ApiUrl { get; set; }
-    public string? HubName { get; set; }
+    public string? UrlLogin { get; set; }
+    public string? UrlHub { get; set; }
     public string? Company { get; set; }
     public string? CompanyId { get; set; }
     public string? TenantId { get; set; }
