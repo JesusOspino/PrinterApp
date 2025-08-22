@@ -1,4 +1,4 @@
-# Nova Printer
+# Printer App
 
 App de escritorio para la impresión de facturas en impresoras térmicas
 
